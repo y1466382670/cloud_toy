@@ -1,0 +1,60 @@
+server:
+  port: 5001
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
+  instance:
+    instance-id: auth-1
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+spring:
+  application:
+    name: auth-service
+  datasource:
+    #type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://123.56.60.46:3306/toys_copy?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: 'P@ssw0rd'
+    initial-size: 100
+    max-active: 1000
+    min-idle: 100
+    max-wait: 600000
+    pool-prepared-statements: true
+    max-pool-prepared-statement-per-connection-size: 200
+    time-between-eviction-runs-millis: 600000
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 1
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    #stat-view-servlet:
+    #enabled: true
+    #url-pattern: /druid/*
+    #login-username: admin
+    #login-password: admin
+    filter:
+      stat:
+        log-slow-sql: true
+        slow-sql-millis: 1000
+        merge-sql: false
+      wall:
+        config:
+          multi-statement-allow: true
+  redis:
+    database: 10
+    host: 123.56.60.46
+    port: 6379
+    password: yzy123456
+    min-idle: 0
+    lettuce:
+      shutdown-timeout: 100ms
+
+mybatis:
+  type-aliases-package: com.yu.dao
+  mapper-locations: classpath:mapper/*.xml
+
+#logging:
+#  config: classpath:log.xml
