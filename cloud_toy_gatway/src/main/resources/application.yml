@@ -31,24 +31,12 @@ spring:
           enabled: true
       #    路由定义
       routes:
-        - id: server-auth
-          uri: lb://server-auth
+        - id: auth-service
+          uri: lb://auth-service:5001
           predicates:
             - Path=/auth/**
 
-        - id: server-user
-          uri: lb://server-user
+        - id: user-service
+          uri: lb://user-service:6001
           predicates:
             - Path=/user/**
-
-org:
-  my:
-    jwt:
-      #跳过认证的路由
-      skip-auth-urls:
-        - /baidu
-      ############################################
-      #   有效时长
-      #     单位：d:天、h:小时、m:分钟、s:秒
-      ###########################################
-      effective-time: 1m
