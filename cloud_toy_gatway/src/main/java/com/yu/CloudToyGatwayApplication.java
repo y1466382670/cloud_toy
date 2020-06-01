@@ -2,12 +2,14 @@ package com.yu;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
-public class CloudToyApplication {
+@EnableEurekaClient
+public class CloudToyGatwayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CloudToyApplication.class, args);
+        SpringApplication.run(CloudToyGatwayApplication.class, args);
     }
 
 }
