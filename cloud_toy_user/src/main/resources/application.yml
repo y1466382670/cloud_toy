@@ -11,7 +11,7 @@ eureka:
     lease-expiration-duration-in-seconds: 30
 spring:
   application:
-    name: server-user
+    name: user-service
   datasource:
     #type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -43,14 +43,14 @@ spring:
       wall:
         config:
           multi-statement-allow: true
-    redis:
-      database: 10
-      host: 123.56.60.46
-      port: 6379
-      password: yzy123456
-      min-idle: 0
-      lettuce:
-        shutdown-timeout: 100ms
+  redis:
+    database: 10
+    host: 123.56.60.46
+    port: 6379
+    password: yzy123456
+    min-idle: 0
+    lettuce:
+      shutdown-timeout: 100ms
 
 mybatis:
   type-aliases-package: com.yu.dao
