@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!--数据库驱动包路径 -->
+    <classPathEntry
+    location="D:\Maven\apache-maven-3.5.2\repository\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
+
+    <context id="mysql" targetRuntime="MyBatis3Simple">
+        <!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表；
+            一般保留默认值，遇到数据库关键字（Java关键字），使用columnOverride覆盖
+         -->
+        <property name="autoDelimitKeywords" value="false"/>
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 格式化java代码 -->
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <!-- 格式化XML代码 -->
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+
+        <!-- beginningDelimiter和endingDelimiter：指明数据库的用于标记数据库对象名的符号，比如ORACLE就是双引号，MYSQL默认是`反引号； -->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!--数据库连接信息 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://123.56.60.46:3306/toys_copy?useUnicode=true"
+                        userId="root"
+                        password="P@ssw0rd">
+        </jdbcConnection>
+        <!--生成的model 包路径 ，其中rootClass为model的基类,配置之后他会自动继承该类作为基类，trimStrings会为model字串去空格-->
+        <javaModelGenerator targetPackage="com.yu.entity" targetProject="src/main/java">
+            <!--  for MyBatis3/MyBatis3Simple
+            自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter -->
+            <property name="constructorBased" value="false"/>
+            <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- for MyBatis3 / MyBatis3Simple
+                是否创建一个不可变的类，如果为true，
+                那么MBG会创建一个没有setter方法的类，取而代之的是类似constructorBased的类
+             -->
+            <property name="immutable" value="false"/>
+            <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--生成mapper xml文件路径 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 生成的Mapper接口的路径 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.yu.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- 对应的表 这个是生成Mapper xml文件的基础，enableCountByExample如果为true则会在xml文件中生成样例，过于累赘所以不要-->
+        <table tableName="user_info">
+            <!-- 参考 javaModelGenerator 的 constructorBased属性-->
+            <property name="constructorBased" value="false"/>
+
+            <!-- 默认为false，如果设置为true，在生成的SQL中，table名字不会加上catalog或schema； -->
+            <property name="ignoreQualifiersAtRuntime" value="false"/>
+
+            <!-- 参考 javaModelGenerator 的 immutable 属性 -->
+            <property name="immutable" value="false"/>
+
+            <!-- 指定是否只生成domain类，如果设置为true，只生成domain类，如果还配置了sqlMapGenerator，那么在mapper XML文件中，只生成resultMap元素 -->
+            <property name="modelOnly" value="false"/>
+            <!-- 如果设置为true，生成的model类会直接使用column本身的名字，而不会再使用驼峰命名方法，比如BORN_DATE，生成的属性名字就是BORN_DATE,而不会是bornDate -->
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+        </table>
+    </context>
+
+</generatorConfiguration>

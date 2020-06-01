@@ -1,0 +1,13 @@
+server:
+  port: 1001
+eureka:
+  instance:
+    hostname: eureka-server1
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 4000
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://eureka-server2:1002/eureka/,http://eureka-server3:1003/eureka/
