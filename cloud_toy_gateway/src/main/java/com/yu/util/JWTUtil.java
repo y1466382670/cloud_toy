@@ -20,12 +20,8 @@ public class JWTUtil {
 
 
     //密钥 -- 根据实际项目，这里可以做成配置
-    public static final String KEY = "022bdc63c3c5a45879ee6581508b9d03adfec4a4658c0ab3d722e50c91a351c42c231cf43bb8f86998202bd301ec52239a74fc0c9a9aeccce604743367c9646b";
-
-    public static final String SECRET_KEY = "123456"; //秘钥
-    public static final long TOKEN_EXPIRE_TIME = 5 * 60 * 1000; //token过期时间
-    public static final long REFRESH_TOKEN_EXPIRE_TIME = 10 * 60 * 1000; //refreshToken过期时间
-    private static final String ISSUER = "issuer"; //签发人
+    public static final String SECRET_KEY = "022bdc63c3c5a45879ee6581508b9d03adfec4a4658c0ab3d722e50c91a351c42c231cf43bb8f86998202bd301ec52239a74fc0c9a9aeccce604743367c9646b";
+    public static final long TOKEN_EXPIRE_TIME = 10080 * 60 * 1000; //token过期时间 10080分钟 7天
 
     /**
      * 由字符串生成加密key
@@ -33,7 +29,7 @@ public class JWTUtil {
      * @return
      */
     public static SecretKey generalKey(){
-        byte[] encodedKey = Base64.decodeBase64(KEY);
+        byte[] encodedKey = Base64.decodeBase64(SECRET_KEY);
         SecretKeySpec key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }

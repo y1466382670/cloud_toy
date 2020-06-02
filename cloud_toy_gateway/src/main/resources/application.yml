@@ -29,14 +29,27 @@ spring:
       discovery:
         locator:
           enabled: true
+          lower-case-service-id: true
       #    路由定义
       routes:
-        - id: auth-service
-          uri: lb://auth-service:5001
-          predicates:
-            - Path=/auth/**
-
         - id: user-service
-          uri: lb://user-service:6001
+          uri: lb://user-service
           predicates:
             - Path=/user/**
+          filters:
+            - StripPrefix=1
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+            - SwaggerHeaderFilter
+jwt:
+  #跳过认证的路由
+  ignoreUrlList: /user/swagger-ui.html,/user/user.info.getDetail
+
+# 配置Gateway日志等级，输出转发细节信息
+logging:
+  level:
+    org.springframework.cloud.gateway: debug

@@ -8,6 +8,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -15,12 +16,14 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 描述: JwtToken 过滤器
@@ -33,7 +36,8 @@ public class JwtTokenFilter implements GlobalFilter, Ordered{
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
 
-    private String[] skipAuthUrls;
+    @Value("${jwt.ignoreUrlList}")
+    private String ignoreUrl;
 
     private ObjectMapper objectMapper;
 
@@ -50,21 +54,28 @@ public class JwtTokenFilter implements GlobalFilter, Ordered{
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String url = exchange.getRequest().getURI().getPath();
-
         //跳过不需要验证的路径
-        if(null != skipAuthUrls && Arrays.asList(skipAuthUrls).contains(url)){
-            return chain.filter(exchange);
+        if(!StringUtils.isEmpty(ignoreUrl)){
+//            List<String> ignoreUrlList = Arrays.asList(ignoreUrl.split(","));
+            System.out.println(ignoreUrl);
+            System.out.println(url);
+            if(ignoreUrl.contains(url)){
+                return chain.filter(exchange);
+            }
         }
         //获取token
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
         ServerHttpResponse resp = exchange.getResponse();
         if(StringUtils.isBlank(token)){
             //没有token
-            return authErro(resp,"请登陆");
+            return authErro(resp,"鉴权失败，无token或类型");
         }else{
             //有token
             try {
-                JWTUtil.isExpired(token);
+                boolean flag = JWTUtil.isExpired(token);
+                if(flag){
+                    return authErro(resp,"登录信息已过期");
+                }
                 return chain.filter(exchange);
             }catch (ExpiredJwtException e){
                 logger.error(e.getMessage(),e);
