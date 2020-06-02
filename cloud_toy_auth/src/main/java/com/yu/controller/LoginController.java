@@ -1,12 +1,14 @@
 package com.yu.controller;
 
+import com.yu.entity.UserInfo;
+import com.yu.service.UserInfoService;
 import com.yu.util.JWTUtil;
 import com.yu.util.R;
 import com.yu.util.UuidUtil;
 import io.jsonwebtoken.Claims;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -19,6 +21,9 @@ public class LoginController {
     @Autowired
     StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private UserInfoService userInfoService;
+
     /**
      * 登录认证
      * @param username 用户名
@@ -26,26 +31,33 @@ public class LoginController {
      */
     @RequestMapping(value = "auth.login", method = RequestMethod.POST)
     public R login(@RequestParam String username, @RequestParam String password) {
-        if("admin".equals(username) && "admin".equals(password)){
-            //生成token
-            String token = JWTUtil.createJWT(username);
-
-            //生成refreshToken
-            String refreshToken = UuidUtil.getUUID();
-
-            //数据放入redis
-            redisTemplate.opsForHash().put(refreshToken, "token", token);
-            redisTemplate.opsForHash().put(refreshToken, "username", username);
-
-            //设置token的过期时间
-            redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
-            Map<String,Object> map = new HashMap<>();
-            map.put("token",token);
-            map.put("refreshToken",refreshToken);
-            return R.ok().put("result", map);
-        }else{
-            return R.error();
+        if(StringUtils.isEmpty(username)){
+            return R.error("请输入账号");
         }
+        UserInfo userInfo = this.userInfoService.selectByPhone(username);
+        if(StringUtils.isEmpty(userInfo)){
+            return R.error("此账号未注册");
+        }
+        if(StringUtils.isEmpty(password)){
+            return R.error("请输入密码");
+        }
+        if(!userInfo.getPassword().equals(password)){
+            return R.error("密码输入错误");
+        }
+        //生成token
+        String token = JWTUtil.createJWT(username);
+        //生成refreshToken
+        String refreshToken = UuidUtil.getUUID();
+        //数据放入redis
+        redisTemplate.opsForHash().put(refreshToken, "token", token);
+        redisTemplate.opsForHash().put(refreshToken, "username", username);
+
+        //设置refreshToken的过期时间 30 天
+        redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",token);
+        map.put("refreshToken",refreshToken);
+        return R.ok().put("result", map);
     }
 
     /**
