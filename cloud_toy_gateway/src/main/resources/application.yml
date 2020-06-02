@@ -44,10 +44,9 @@ spring:
             - Path=/auth/**
           filters:
             - StripPrefix=1
-            - SwaggerHeaderFilter
 jwt:
   #跳过认证的路由
-  ignoreUrlList: /user/swagger-ui.html,/user/user.info.getDetail
+  ignoreUrlList: /auth/auth.login,/auth/auth.refreshToken,/user/user.info.getDetail
 
 # 配置Gateway日志等级，输出转发细节信息
 logging:

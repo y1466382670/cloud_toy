@@ -70,4 +70,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = this.userInfoMapper.selectByPrimaryKey(id);
         return userInfo;
     }
+
+    /**
+     * 根据手机号查询用户详情
+     * @param phone
+     * @return
+     */
+    @Override
+    public UserInfo selectByPhone(String phone) {
+        UserInfo userInfo = this.userInfoMapper.selectByPhone(phone);
+        return userInfo;
+    }
 }

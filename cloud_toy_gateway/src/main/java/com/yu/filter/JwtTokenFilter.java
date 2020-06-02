@@ -27,9 +27,8 @@ import java.util.List;
 
 /**
  * 描述: JwtToken 过滤器
- *
- * @Auther: lzx
- * @Date: 2019/7/9 15:49
+ * @Auther: yanzhiyu
+ * @Date: 2020/06/02 15:00
  */
 @Component
 public class JwtTokenFilter implements GlobalFilter, Ordered{

@@ -86,4 +86,11 @@
     address_city, address_area, open_id
     from user_info
   </select>
+
+  <select id="selectByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, nick_name, phone, password, head_url, last_login_time, create_date, address_province,
+    address_city, address_area, open_id
+    from user_info
+    where phone = #{phone,jdbcType=VARCHAR}
+  </select>
 </mapper>

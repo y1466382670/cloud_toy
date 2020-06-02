@@ -1,6 +1,8 @@
 package com.yu.dao;
 
 import com.yu.entity.UserInfo;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface UserInfoMapper {
@@ -43,4 +45,11 @@ public interface UserInfoMapper {
      * @mbggenerated Mon Jun 01 11:06:39 CST 2020
      */
     int updateByPrimaryKey(UserInfo record);
+
+    /**
+     * 根据手机号查询用户信息
+     * @param phone
+     * @return
+     */
+    UserInfo selectByPhone(@Param("phone") String phone);
 }

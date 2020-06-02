@@ -39,4 +39,11 @@ public interface UserInfoService {
      * @return
      */
     UserInfo selectByPrimaryKey(int id);
+
+    /**
+     * 根据用户手机号查询用户详情
+     * @param phone
+     * @return
+     */
+    UserInfo selectByPhone(String phone);
 }
