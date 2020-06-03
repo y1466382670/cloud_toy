@@ -44,6 +44,12 @@ spring:
             - Path=/auth/**
           filters:
             - StripPrefix=1
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
+          filters:
+            - StripPrefix=1
 jwt:
   #跳过认证的路由
   ignoreUrlList: /auth/auth.login,/auth/auth.refreshToken,/user/user.info.getDetail

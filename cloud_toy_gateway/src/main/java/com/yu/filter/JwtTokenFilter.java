@@ -52,42 +52,42 @@ public class JwtTokenFilter implements GlobalFilter, Ordered{
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String url = exchange.getRequest().getURI().getPath();
-        //跳过不需要验证的路径
-        if(!StringUtils.isEmpty(ignoreUrl)){
-//            List<String> ignoreUrlList = Arrays.asList(ignoreUrl.split(","));
-            System.out.println(ignoreUrl);
-            System.out.println(url);
-            if(ignoreUrl.contains(url)){
+//        String url = exchange.getRequest().getURI().getPath();
+//        //跳过不需要验证的路径
+//        if(!StringUtils.isEmpty(ignoreUrl)){
+////            List<String> ignoreUrlList = Arrays.asList(ignoreUrl.split(","));
+//            System.out.println(ignoreUrl);
+//            System.out.println(url);
+//            if(ignoreUrl.contains(url)){
                 return chain.filter(exchange);
-            }
-        }
-        //获取token
-        String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-        ServerHttpResponse resp = exchange.getResponse();
-        if(StringUtils.isBlank(token)){
-            //没有token
-            return authErro(resp,"鉴权失败，无token或类型");
-        }else{
-            //有token
-            try {
-                boolean flag = JWTUtil.isExpired(token);
-                if(flag){
-                    return authErro(resp,"登录信息已过期");
-                }
-                return chain.filter(exchange);
-            }catch (ExpiredJwtException e){
-                logger.error(e.getMessage(),e);
-                if(e.getMessage().contains("Allowed clock skew")){
-                    return authErro(resp,"认证过期");
-                }else{
-                    return authErro(resp,"认证失败");
-                }
-            }catch (Exception e) {
-                logger.error(e.getMessage(),e);
-                return authErro(resp,"认证失败");
-            }
-        }
+//            }
+//        }
+//        //获取token
+//        String token = exchange.getRequest().getHeaders().getFirst("Authorization");
+//        ServerHttpResponse resp = exchange.getResponse();
+//        if(StringUtils.isBlank(token)){
+//            //没有token
+//            return authErro(resp,"鉴权失败，无token或类型");
+//        }else{
+//            //有token
+//            try {
+//                boolean flag = JWTUtil.isExpired(token);
+//                if(flag){
+//                    return authErro(resp,"登录信息已过期");
+//                }
+//                return chain.filter(exchange);
+//            }catch (ExpiredJwtException e){
+//                logger.error(e.getMessage(),e);
+//                if(e.getMessage().contains("Allowed clock skew")){
+//                    return authErro(resp,"认证过期");
+//                }else{
+//                    return authErro(resp,"认证失败");
+//                }
+//            }catch (Exception e) {
+//                logger.error(e.getMessage(),e);
+//                return authErro(resp,"认证失败");
+//            }
+//        }
     }
 
     /**
