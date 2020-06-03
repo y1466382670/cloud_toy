@@ -50,4 +50,7 @@ public class BookInfo {
     @ApiModelProperty(value = "修改时间")
     private String updateDate;
 
+    @ApiModelProperty(value = "库存数量")
+    private int stockNum;
+
 }
