@@ -2,6 +2,7 @@ package com.yu.util;
 
 import io.jsonwebtoken.*;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
@@ -16,12 +17,13 @@ import java.util.Map;
  * @Auther: lzx
  * @Date: 2019/7/9 17:50
  */
+@Component
 public class JWTUtil {
-
 
     //密钥 -- 根据实际项目，这里可以做成配置
     public static final String SECRET_KEY = "022bdc63c3c5a45879ee6581508b9d03adfec4a4658c0ab3d722e50c91a351c42c231cf43bb8f86998202bd301ec52239a74fc0c9a9aeccce604743367c9646b";
     public static final long TOKEN_EXPIRE_TIME = 10080 * 60 * 1000; //token过期时间 10080分钟 7天
+    public static final long REFRESH_TOKEN_EXPIRE_TIME = 1440 * 30 * 60 * 1000;  //refreshToken过期时间 30天
 
     /**
      * 由字符串生成加密key
@@ -126,5 +128,20 @@ public class JWTUtil {
         }
     }
 
+    /**
+     * 通过token获得用户名
+     * @param token
+     * @return
+     */
+    public String getUsernameFromToken(String token) {
+        String username;
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            username = claims.getSubject();
+        } catch (Exception e) {
+            username = null;
+        }
+        return username;
+    }
 
 }

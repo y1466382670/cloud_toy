@@ -56,5 +56,9 @@ mybatis:
   type-aliases-package: com.yu.dao
   mapper-locations: classpath:mapper/*.xml
 
+security:
+  loginAfterTime: 5 #错误超过次数后多少分钟后才能继续登录（分钟）
+  loginTimeLimit: 5 #限制用户登陆错误次数（次）
+
 #logging:
 #  config: classpath:log.xml

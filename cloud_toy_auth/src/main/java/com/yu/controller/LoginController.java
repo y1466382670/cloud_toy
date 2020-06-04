@@ -5,7 +5,6 @@ import com.yu.service.UserInfoService;
 import com.yu.util.JWTUtil;
 import com.yu.util.R;
 import com.yu.util.UuidUtil;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
