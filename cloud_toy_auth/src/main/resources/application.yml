@@ -44,7 +44,7 @@ spring:
         config:
           multi-statement-allow: true
   redis:
-    database: 10
+    database: 0
     host: 123.56.60.46
     port: 6379
     password: yzy123456

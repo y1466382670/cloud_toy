@@ -28,7 +28,7 @@ public class LoginController {
      * @param username 用户名
      * @param password 密码
      */
-    @RequestMapping(value = "auth.login", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth.login", method = RequestMethod.POST)
     public R login(@RequestParam String username, @RequestParam String password) {
         if(StringUtils.isEmpty(username)){
             return R.error("请输入账号");
@@ -62,7 +62,7 @@ public class LoginController {
     /**
      * 刷新token
      */
-    @RequestMapping(value = "auth.refreshToken", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth.refreshToken", method = RequestMethod.POST)
     public R refreshToken(@RequestParam String refreshToken) {
         String username = (String)redisTemplate.opsForHash().get(refreshToken, "username");
         if(StringUtils.isEmpty(username)){
@@ -80,7 +80,7 @@ public class LoginController {
     /**
      * 校验token
      */
-    @RequestMapping(value = "auth.token.verify", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth.token.verify", method = RequestMethod.POST)
     public R verifyToken(@RequestParam String token) {
         Boolean claims = JWTUtil.isExpired(token);
         return R.ok().put("result", claims);
