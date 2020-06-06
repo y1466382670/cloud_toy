@@ -2,6 +2,7 @@ package com.yu.config;
 
 import com.yu.filter.JwtAuthorizeFilter;
 import com.yu.handler.CustomHttpBasicServerAuthenticationEntryPoint;
+import com.yu.handler.CustomServerSecurityContextRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,9 @@ public class SecurityConfig {
 
     @Autowired
     private CustomHttpBasicServerAuthenticationEntryPoint customHttpBasicServerAuthenticationEntryPoint;
+    @Autowired
+    private CustomServerSecurityContextRepository customServerSecurityContextRepository;
+
     @Bean
     public JwtAuthorizeFilter authorizeFilter() throws Exception{
         return new JwtAuthorizeFilter();
@@ -49,6 +53,7 @@ public class SecurityConfig {
 //                .authenticationFailureHandler(loginFailureHandler)
 //                //基于http的接口请求鉴权失败
 //                .and()
+                .securityContextRepository(customServerSecurityContextRepository)
                 .exceptionHandling().authenticationEntryPoint(customHttpBasicServerAuthenticationEntryPoint)
                 //必须支持跨域
                 .and().csrf().disable()
@@ -60,6 +65,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
     }
-
 
 }

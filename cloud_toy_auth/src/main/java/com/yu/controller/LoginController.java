@@ -4,6 +4,7 @@ import com.yu.entity.UserInfo;
 import com.yu.service.UserInfoService;
 import com.yu.util.JWTUtil;
 import com.yu.util.R;
+import com.yu.util.RedisUtil;
 import com.yu.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginController {
 
     @Autowired
-    StringRedisTemplate redisTemplate;
+    RedisUtil redisTemplate;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -48,11 +49,11 @@ public class LoginController {
         //生成refreshToken
         String refreshToken = UuidUtil.getUUID();
         //数据放入redis
-        redisTemplate.opsForHash().put(refreshToken, "token", token);
-        redisTemplate.opsForHash().put(refreshToken, "username", username);
+        redisTemplate.hset(refreshToken, "token", token);
+        redisTemplate.hset(refreshToken, "username", username);
 
         //设置refreshToken的过期时间 30 天
-        redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME);
         Map<String,Object> map = new HashMap<>();
         map.put("token",token);
         map.put("refreshToken",refreshToken);
@@ -64,13 +65,13 @@ public class LoginController {
      */
     @RequestMapping(value = "/auth.refreshToken", method = RequestMethod.POST)
     public R refreshToken(@RequestParam String refreshToken) {
-        String username = (String)redisTemplate.opsForHash().get(refreshToken, "username");
+        String username = (String)redisTemplate.hget(refreshToken, "username");
         if(StringUtils.isEmpty(username)){
             return R.error("refreshToken error");
         }
         //生成新的token
         String newToken = JWTUtil.createJWT(username);
-        redisTemplate.opsForHash().put(refreshToken, "token", newToken);
+        redisTemplate.hset(refreshToken, "token", newToken);
         Map<String,Object> map = new HashMap<>();
         map.put("token",newToken);
         map.put("refreshToken",refreshToken);

@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  * @Date 2020/06/04
  **/
 @Component
-public class UserDetailsServiceImpl implements ReactiveUserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService /**ReactiveUserDetailsService*/ {
     //登入重试时间
     @Value("${security.loginAfterTime}")
     private Integer loginAfterTime;
@@ -31,8 +31,33 @@ public class UserDetailsServiceImpl implements ReactiveUserDetailsService {
     @Resource
     private UserInfoMapper userInfoMapper;
 
+//    @Override
+//    public Mono<UserDetails> findByUsername(String username) {
+//        String flagKey = "loginFailFlag:"+username;
+//        String value = redisTemplate.opsForValue().get(flagKey);
+//        if(StringUtils.isNotBlank(value)){
+//            //超过限制次数
+//            throw new UsernameNotFoundException("登录错误次数超过限制，请"+loginAfterTime+"分钟后再试");
+//        }
+//        //查询用户信息
+//        UserInfo userInfo = userInfoMapper.selectByPhone(username);
+//        if(null==userInfo){
+//            throw new UsernameNotFoundException("the user does not exist");
+//        }
+//        UserDetails user = User.withUsername(userInfo.getPhone())
+//                .build();
+//        return Mono.just(user);
+//    }
+
+    /**
+     * 通过用户主键获取账号信息
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     * @description spring security底层调用此方法
+     */
     @Override
-    public Mono<UserDetails> findByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String flagKey = "loginFailFlag:"+username;
         String value = redisTemplate.opsForValue().get(flagKey);
         if(StringUtils.isNotBlank(value)){
@@ -44,9 +69,7 @@ public class UserDetailsServiceImpl implements ReactiveUserDetailsService {
         if(null==userInfo){
             throw new UsernameNotFoundException("the user does not exist");
         }
-        UserDetails user = User.withUsername(userInfo.getPhone())
-                .build();
-        return Mono.just(user);
+        return new AuthUserDetails(userInfo);
     }
 
 }
