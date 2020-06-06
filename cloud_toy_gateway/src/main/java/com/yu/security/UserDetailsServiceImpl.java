@@ -2,17 +2,12 @@ package com.yu.security;
 
 import com.yu.dao.UserInfoMapper;
 import com.yu.entity.UserInfo;
-import com.yu.service.feign.UserInfoFeignService;
-import com.yu.util.R;
-import org.apache.commons.lang.StringUtils;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -32,9 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService /**ReactiveUse
 
     @Resource
     private UserInfoMapper userInfoMapper;
-
-    @Autowired
-    private UserInfoFeignService userInfoFeignService;
 
 //    @Override
 //    public Mono<UserDetails> findByUsername(String username) {
@@ -65,11 +57,10 @@ public class UserDetailsServiceImpl implements UserDetailsService /**ReactiveUse
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String flagKey = "loginFailFlag:"+username;
         String value = redisTemplate.opsForValue().get(flagKey);
-        if(StringUtils.isNotBlank(value)){
+        if(!StringUtils.isEmpty(value)){
             //超过限制次数
             throw new UsernameNotFoundException("登录错误次数超过限制，请"+loginAfterTime+"分钟后再试");
         }
-        R o = userInfoFeignService.selectUserInfoByPhone(username);
         //查询用户信息
         UserInfo userInfo = userInfoMapper.selectByPhone(username);
         if(null==userInfo){

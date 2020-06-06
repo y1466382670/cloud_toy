@@ -1,7 +1,12 @@
 package com.yu.handler;
 
+import com.alibaba.fastjson.JSONObject;
+import com.yu.entity.UserInfo;
 import com.yu.security.UserDetailsServiceImpl;
+import com.yu.service.feign.UserInfoFeignService;
 import com.yu.util.JWTUtil;
+import com.yu.util.MapToJsonUtil;
+import com.yu.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +17,12 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -27,6 +36,8 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
     private JWTUtil jwtUtil;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private UserInfoFeignService userInfoFeignService;
 
     @Override
     public Mono<Void> save(ServerWebExchange serverWebExchange, SecurityContext securityContext) {
@@ -40,12 +51,20 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
         String userIdFromToken = null;
         try {
             if (Strings.isNotBlank(token)) {
-                userIdFromToken = jwtUtil.getUsernameFromToken(token);
-                if (Strings.isNotBlank(userIdFromToken)) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(userIdFromToken);
-                    authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    authentication.setDetails(userDetails);
+                //使用token去表中 查找用户
+                R r = this.userInfoFeignService.selectUserInfoByToken(token);
+                //将返回的map转为json
+                JSONObject jsonObj = MapToJsonUtil.feignMapToJson(r);
+                //如果jsonObj不为空且查找到了用户
+                if(!StringUtils.isEmpty(jsonObj) && !StringUtils.isEmpty(jsonObj.get("phone"))){
+                    //通过token获得用户名
+                    userIdFromToken = jwtUtil.getUsernameFromToken(token);
+                    if (!StringUtils.isEmpty(userIdFromToken)) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(userIdFromToken);
+                        authentication = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        authentication.setDetails(userDetails);
+                    }
                 }
             }
         } catch (Exception e) {
