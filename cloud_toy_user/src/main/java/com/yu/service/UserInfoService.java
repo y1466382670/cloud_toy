@@ -46,4 +46,11 @@ public interface UserInfoService {
      * @return
      */
     UserInfo selectByPhone(String phone);
+
+    /**
+     * 根据token查询用户
+     * @param token
+     * @return
+     */
+    UserInfo selectInfoByToken(String token);
 }

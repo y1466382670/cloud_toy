@@ -52,4 +52,11 @@ public interface UserInfoMapper {
      * @return
      */
     UserInfo selectByPhone(@Param("phone") String phone);
+
+    /**
+     * 根据token查询用户
+     * @param token
+     * @return
+     */
+    UserInfo selectInfoByToken(@Param("token") String token);
 }

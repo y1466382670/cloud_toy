@@ -81,4 +81,15 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = this.userInfoMapper.selectByPhone(phone);
         return userInfo;
     }
+
+    /**
+     * 根据token查询用户
+     * @param token
+     * @return
+     */
+    @Override
+    public UserInfo selectInfoByToken(String token) {
+        UserInfo userInfo = this.userInfoMapper.selectInfoByToken(token);
+        return userInfo;
+    }
 }

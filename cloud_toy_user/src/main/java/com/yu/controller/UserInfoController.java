@@ -104,4 +104,16 @@ public class UserInfoController {
         return R.ok().put("result",userInfo);
     }
 
+    @RequestMapping(value = "/user.info.selectInfoByToken", method = RequestMethod.POST)
+    @ApiOperation(value = "会员管理.根据token查询会员", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_VALUE)
+    public R selectInfoByToken(
+            @ApiParam(value = "token", required = true) @RequestParam(value = "token", required = true) String token
+    ){
+        UserInfo userInfo = this.userInfoService.selectInfoByToken(token);
+        if(StringUtils.isEmpty(userInfo)){
+            return R.error();
+        }
+        return R.ok().put("result",userInfo);
+    }
+
 }
