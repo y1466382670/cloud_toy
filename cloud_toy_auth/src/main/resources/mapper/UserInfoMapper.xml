@@ -18,6 +18,7 @@
     <result column="address_city" jdbcType="VARCHAR" property="addressCity" />
     <result column="address_area" jdbcType="VARCHAR" property="addressArea" />
     <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
@@ -40,11 +41,11 @@
     insert into user_info (nick_name, phone, password, 
       head_url, last_login_time, create_date, 
       address_province, address_city, address_area, 
-      open_id)
+      open_id, token)
     values (#{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{headUrl,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, 
       #{addressProvince,jdbcType=VARCHAR}, #{addressCity,jdbcType=VARCHAR}, #{addressArea,jdbcType=VARCHAR}, 
-      #{openId,jdbcType=VARCHAR})
+      #{openId,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.yu.entity.UserInfo">
     <!--
@@ -62,9 +63,18 @@
       address_province = #{addressProvince,jdbcType=VARCHAR},
       address_city = #{addressCity,jdbcType=VARCHAR},
       address_area = #{addressArea,jdbcType=VARCHAR},
-      open_id = #{openId,jdbcType=VARCHAR}
+      open_id = #{openId,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 修改用户token -->
+  <update id="updateUserToken">
+    update user_info
+    set
+        token = #{token,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbggenerated
@@ -72,7 +82,7 @@
       This element was generated on Mon Jun 01 11:06:39 CST 2020.
     -->
     select id, nick_name, phone, password, head_url, last_login_time, create_date, address_province, 
-    address_city, address_area, open_id
+    address_city, address_area, open_id, token
     from user_info
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -83,13 +93,13 @@
       This element was generated on Mon Jun 01 11:06:39 CST 2020.
     -->
     select id, nick_name, phone, password, head_url, last_login_time, create_date, address_province, 
-    address_city, address_area, open_id
+    address_city, address_area, open_id, token
     from user_info
   </select>
 
   <select id="selectByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
     select id, nick_name, phone, password, head_url, last_login_time, create_date, address_province,
-    address_city, address_area, open_id
+    address_city, address_area, open_id, token
     from user_info
     where phone = #{phone,jdbcType=VARCHAR}
   </select>

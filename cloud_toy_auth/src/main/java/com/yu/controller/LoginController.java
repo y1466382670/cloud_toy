@@ -47,13 +47,16 @@ public class LoginController {
         //生成token
         String token = JWTUtil.createJWT(username);
         //生成refreshToken
-        String refreshToken = UuidUtil.getUUID();
+        String refreshToken = "userToken-"+username;
         //数据放入redis
         redisTemplate.hset(refreshToken, "token", token);
         redisTemplate.hset(refreshToken, "username", username);
-
         //设置refreshToken的过期时间 30 天
         redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME);
+        boolean flag = userInfoService.updateUserToken(userInfo.getId(),token);
+        if(!flag){
+            return R.error("登陆失败，请重新登录");
+        }
         Map<String,Object> map = new HashMap<>();
         map.put("token",token);
         map.put("refreshToken",refreshToken);
@@ -86,11 +89,5 @@ public class LoginController {
         Boolean claims = JWTUtil.isExpired(token);
         return R.ok().put("result", claims);
     }
-
-//    @GetMapping("/")
-//    public String index() {
-//        return "auth-service: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-//    }
-
 
 }

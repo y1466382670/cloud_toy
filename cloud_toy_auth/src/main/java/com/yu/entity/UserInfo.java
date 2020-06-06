@@ -41,4 +41,7 @@ public class UserInfo {
     @ApiModelProperty(value = "openId")
     private String openId;
 
+    @ApiModelProperty(value = "令牌")
+    private String token;
+
 }

@@ -46,4 +46,11 @@ public interface UserInfoService {
      * @return
      */
     UserInfo selectByPhone(String phone);
+
+    /**
+     * 修改用户token
+     * @param id 主键
+     * @param token
+     */
+    boolean updateUserToken(int id, String token);
 }

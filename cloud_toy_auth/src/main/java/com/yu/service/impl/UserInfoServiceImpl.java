@@ -81,4 +81,19 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = this.userInfoMapper.selectByPhone(phone);
         return userInfo;
     }
+
+    /**
+     * 修改用户token
+     * @param id 主键
+     * @param token
+     * @return
+     */
+    @Override
+    public boolean updateUserToken(int id, String token) {
+        int result = this.userInfoMapper.updateUserToken(id, token);
+        if(result<=0){
+            return false;
+        }
+        return true;
+    }
 }
