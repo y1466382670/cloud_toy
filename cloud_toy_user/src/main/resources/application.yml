@@ -30,11 +30,6 @@ spring:
     test-while-idle: true
     test-on-borrow: false
     test-on-return: false
-      #stat-view-servlet:
-    #enabled: true
-    #url-pattern: /druid/*
-    #login-username: admin
-    #login-password: admin
     filter:
       stat:
         log-slow-sql: true
@@ -51,10 +46,8 @@ spring:
     min-idle: 0
     lettuce:
       shutdown-timeout: 100ms
-
 mybatis:
   type-aliases-package: com.yu.dao
   mapper-locations: classpath:mapper/*.xml
-
 #logging:
 #  config: classpath:log.xml
