@@ -1,4 +1,4 @@
-package com.yu.config;
+package com.yu.alipay;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

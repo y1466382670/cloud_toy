@@ -1,4 +1,4 @@
-package com.yu.config;
+package com.yu.alipay;
 
 import com.yu.filter.JwtAuthorizeFilter;
 import com.yu.handler.CustomHttpBasicServerAuthenticationEntryPoint;
