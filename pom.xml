@@ -4,7 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>cloud_toy_gatway</module>
+        <module>cloud_toy_auth</module>
+        <module>cloud_toy_common</module>
+        <module>cloud_toy_eureka</module>
+        <module>cloud_toy_gateway</module>
+        <module>cloud_toy_pay</module>
+        <module>cloud_toy_product</module>
+        <module>cloud_toy_user</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
