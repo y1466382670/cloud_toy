@@ -1,4 +1,4 @@
-package com.yu.alipay;
+package com.yu.config;
 
 import feign.codec.Decoder;
 import org.springframework.beans.BeansException;

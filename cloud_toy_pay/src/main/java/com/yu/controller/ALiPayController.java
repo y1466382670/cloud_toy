@@ -4,13 +4,16 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.domain.AlipayTradePagePayModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
+import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.yu.alipay.AlipayConfig;
 import com.yu.util.DateUtil;
 import com.yu.util.R;
@@ -135,6 +138,34 @@ public class ALiPayController {
         }
     }
 
+    /**
+     * alipay.trade.refund(统一收单交易退款接口)
+     * 文档地址：https://opendocs.alipay.com/apis/api_1/alipay.trade.refund
+     * @param outTradeNo 订单支付时传入的商户订单号
+     * @param refundAmount 退款金额
+     * @throws AlipayApiException
+     */
+    @RequestMapping(value = "/alipayTradeRefund", method = RequestMethod.POST)
+    @ApiOperation(value = "统一收单交易退款接口", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public void alipayTradeRefund(
+            @RequestParam(value = "outTradeNo") String outTradeNo,
+            @RequestParam(value = "refundAmount") String refundAmount
+
+    ) throws AlipayApiException {
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+        model.setOutTradeNo(outTradeNo);
+        model.setRefundAmount(refundAmount);
+        request.setBizModel(model);
+        AlipayTradeRefundResponse response = AlipayConfig.getInstance().execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+            System.out.println(response.toString());
+        } else {
+            System.out.println("调用失败");
+        }
+    }
+
     @RequestMapping(value = "/aliAppPayNotify", method = RequestMethod.POST)
     @ApiOperation(value = "APP支付回调地址", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void aliAppPayNotify(HttpServletRequest request, HttpServletResponse response) throws AlipayApiException {
@@ -154,13 +185,15 @@ public class ALiPayController {
             //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             paramsMap.put(name, valueStr);
         }
+        //异步通知验签
         //调用SDK验证签名,记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
-        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
-        boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, AlipayConfig.ALIPAY_PUBLIC_KEY, "utf-8", "RSA2");
+        boolean signVerified = AlipaySignature.rsaCheckV1(paramsMap, AlipayConfig.ALIPAY_PUBLIC_KEY, "UTF-8", "RSA2");
         if (signVerified) {
+            // TODO 验签成功后，按照支付结果异步通知中的描述，对支付结果中的业务内容进行二次校验，校验成功后在response中返回success并继续商户自身业务处理，校验失败返回failure
             String orderno = paramsMap.get("out_trade_no");
             logger.info("支付宝支付成功:"+orderno);
         }else {
+            // TODO 验签失败则记录异常日志，并在response中返回failure.
             logger.info("支付宝成功回调验签失败");
         }
     }

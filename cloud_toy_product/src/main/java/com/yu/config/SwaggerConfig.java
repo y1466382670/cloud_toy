@@ -1,4 +1,4 @@
-package com.yu.alipay;
+package com.yu.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +49,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("商城接口管理RESTful APIs")
+                .title("商城接口 Product RESTful APIs")
                 .description("了解更多请关注：1466382670@qq.com")
                 .version("2.9.2")
                 .build();
