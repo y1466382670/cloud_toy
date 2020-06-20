@@ -7,7 +7,7 @@
 
     <!--数据库驱动包路径 -->
     <classPathEntry
-    location="D:\Maven\apache-maven-3.5.2\repository\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
+    location="E:\Maven\apache-maven-3.5.2\repository\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
 
     <context id="mysql" targetRuntime="MyBatis3Simple">
         <!-- 自动识别数据库关键字，默认false，如果设置为true，根据SqlReservedWords中定义的关键字列表；
@@ -58,7 +58,7 @@
         </javaClientGenerator>
 
         <!-- 对应的表 这个是生成Mapper xml文件的基础，enableCountByExample如果为true则会在xml文件中生成样例，过于累赘所以不要-->
-        <table tableName="book_classify_detail">
+        <table tableName="book_stock">
             <!-- 参考 javaModelGenerator 的 constructorBased属性-->
             <property name="constructorBased" value="false"/>
 

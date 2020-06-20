@@ -30,7 +30,7 @@ public class SecurityConfig {
     //security的鉴权排除的url列表
     private static final String[] excludedAuthPages = {
             "/auth/**",
-            "/login"
+            "/product/**"
     };
 
     @Bean
