@@ -21,9 +21,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 @Component
 @Slf4j
 /**
@@ -50,7 +47,10 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
         UsernamePasswordAuthenticationToken authentication = null;
         String userIdFromToken = null;
         try {
-            if (Strings.isNotBlank(token)) {
+            if (Strings.isNotBlank(token) && token.startsWith("Bearer ")) {
+
+                token = token.substring("Bearer ".length());
+
                 //使用token去表中 查找用户
                 R r = this.userInfoFeignService.selectUserInfoByToken(token);
                 //将返回的map转为json

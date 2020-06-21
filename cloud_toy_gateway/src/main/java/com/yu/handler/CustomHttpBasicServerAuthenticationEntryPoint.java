@@ -23,8 +23,6 @@ public class CustomHttpBasicServerAuthenticationEntryPoint extends HttpBasicServ
 
     private static final Logger logger = LoggerFactory.getLogger(CustomHttpBasicServerAuthenticationEntryPoint.class);
 
-    private static final String WWW_AUTHENTICATE = "WWW-Authenticate";
-    private static final String DEFAULT_REALM = "Realm";
     private static String WWW_AUTHENTICATE_FORMAT = "Basic realm=\"%s\"";
     private String headerValue = createHeaderValue("Realm");
     public CustomHttpBasicServerAuthenticationEntryPoint() {
