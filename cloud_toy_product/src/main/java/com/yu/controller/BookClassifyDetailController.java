@@ -40,11 +40,15 @@ public class BookClassifyDetailController {
     @ApiOperation(value = "图书详细分类.查询分类列表", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public R selectAll(
             @ApiParam(value = "pageNo", required = true) @RequestParam(value = "pageNo", required = true) int pageNo,
-            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize", required = true) int pageSize
+            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize", required = true) int pageSize,
+            @ApiParam(value = "bookClassifyCode", required = false) @RequestParam(value = "bookClassifyCode", required = false) String bookClassifyCode,
+            @ApiParam(value = "bookClassifyDetailCode", required = false) @RequestParam(value = "bookClassifyDetailCode", required = false) String bookClassifyDetailCode,
+            @ApiParam(value = "bookClassifyDetailName", required = false) @RequestParam(value = "bookClassifyDetailName", required = false) String bookClassifyDetailName
     ){
-        logger.info("图书详细分类.查询分类列表,请求参数:pageNo={},pageSize={}",pageNo,pageSize);
+        logger.info("图书详细分类.查询分类列表,请求参数:bookClassifyCode={},bookClassifyDetailCode={},bookClassifyDetailName={},pageNo={},pageSize={}",
+                bookClassifyCode,bookClassifyDetailCode,bookClassifyDetailName,pageNo,pageSize);
         PageHelper.startPage(pageNo,pageSize);
-        List<BookClassifyDetail> list = bookClassifyDetailService.selectAll();
+        List<BookClassifyDetail> list = bookClassifyDetailService.selectAll(bookClassifyCode,bookClassifyDetailCode,bookClassifyDetailName);
         PageInfo<BookClassifyDetail> pageInfo = new PageInfo<>(list);
         return R.ok().put("result",pageInfo);
     }
