@@ -11,7 +11,8 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
+      defaultZone: http://123.56.60.46:1001/eureka/
+#      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
   instance:
     prefer-ip-address: true
     instance-id: gateway-1
@@ -32,7 +33,7 @@ spring:
         cors-configurations:
           '[/**]':
             #这里有个allowCredentials: true这个东西是设置允许访问携带cookie的，这点一定要和前端对应！
-            allowCredentials: true
+            #allowCredentials: true
             #可以填写多个域名用","隔开 例如："http://www.xiaolc.cn,https://spring.io"  "*"代表允许所有
             allowedOrigins: "*"
             allowedMethods: "*"
@@ -123,3 +124,8 @@ security:
 logging:
   level:
     org.springframework.cloud.gateway: debug
+
+#开启熔断器
+feign:
+  hystrix:
+    enabled: true
