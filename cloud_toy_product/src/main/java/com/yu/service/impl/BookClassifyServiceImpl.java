@@ -19,10 +19,12 @@ public class BookClassifyServiceImpl implements BookClassifyService {
     /**
      * 查询所有图书分类
      * @return
+     * @param bookClassifyName
+     * @param bookClassifyCode
      */
     @Override
-    public List<BookClassify> selectAll() {
-        List<BookClassify> list = this.bookClassifyMapper.selectAll();
+    public List<BookClassify> selectAll(String bookClassifyName, String bookClassifyCode) {
+        List<BookClassify> list = this.bookClassifyMapper.selectAll(bookClassifyName, bookClassifyCode);
         return list;
     }
 

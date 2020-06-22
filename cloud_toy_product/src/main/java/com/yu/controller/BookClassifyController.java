@@ -37,11 +37,13 @@ public class BookClassifyController {
     @ApiOperation(value = "图书大分类.查询分类列表", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public R selectAll(
             @ApiParam(value = "pageNo", required = true) @RequestParam(value = "pageNo", required = true) int pageNo,
-            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize", required = true) int pageSize
+            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize", required = true) int pageSize,
+            @ApiParam(name = "bookClassifyName", value = "分类名称", required = false) @RequestParam(value = "bookClassifyName", required = false) String bookClassifyName,
+            @ApiParam(name = "bookClassifyCode", value = "分类编码", required = false) @RequestParam(value = "bookClassifyCode", required = false) String bookClassifyCode
     ){
         logger.info("图书大分类.查询分类列表,请求参数:pageNo={},pageSize={}",pageNo,pageSize);
         PageHelper.startPage(pageNo,pageSize);
-        List<BookClassify> list = bookClassifyService.selectAll();
+        List<BookClassify> list = bookClassifyService.selectAll(bookClassifyName,bookClassifyCode);
         PageInfo<BookClassify> pageInfo = new PageInfo<>(list);
         return R.ok().put("result",pageInfo);
     }

@@ -10,8 +10,10 @@ public interface BookClassifyService {
     /**
      * 查询所有图书分类
      * @return
+     * @param bookClassifyName
+     * @param bookClassifyCode
      */
-    List<BookClassify> selectAll();
+    List<BookClassify> selectAll(String bookClassifyName, String bookClassifyCode);
 
     /**
      * 新增图书分类

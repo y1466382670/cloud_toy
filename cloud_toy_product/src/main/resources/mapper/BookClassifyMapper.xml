@@ -87,6 +87,14 @@
     -->
     select id, book_classify_name, book_classify_code, sort, remark, create_date, update_date
     from book_classify
+    <where>
+      <if test="bookClassifyName != null and bookClassifyName != ''">
+        book_classify_name like "%" #{bookClassifyName} "%"
+      </if>
+      <if test="bookClassifyCode != null and bookClassifyCode != ''">
+        and book_classify_code like "%" #{bookClassifyCode} "%"
+      </if>
+    </where>
   </select>
 
   <!-- 根据分类编码查询 -->
