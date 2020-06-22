@@ -3,7 +3,8 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
+      defaultZone: http://123.56.60.46:1001/eureka/
+#      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
   instance:
     instance-id: auth-1
     prefer-ip-address: true
@@ -57,8 +58,8 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 security:
-  loginAfterTime: 5 #错误超过次数后多少分钟后才能继续登录（分钟）
-  loginTimeLimit: 5 #限制用户登陆错误次数（次）
+  loginAfterTime: 5
+  loginTimeLimit: 5
 
 #logging:
 #  config: classpath:log.xml

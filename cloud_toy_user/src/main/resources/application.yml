@@ -3,7 +3,8 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
+      defaultZone: http://123.56.60.46:1001/eureka/
+#      defaultZone: http://123.56.60.46:1001/eureka/,http://123.56.60.46:1002/eureka/,http://123.56.60.46:1003/eureka/
   instance:
     instance-id: user-1
     prefer-ip-address: true
