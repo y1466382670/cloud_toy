@@ -56,6 +56,17 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- 服务跟踪 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <!-- zipkin -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
+
         <!-- 自动生成代码 mybatisGenerator jar -->
         <dependency>
             <groupId>org.mybatis.generator</groupId>

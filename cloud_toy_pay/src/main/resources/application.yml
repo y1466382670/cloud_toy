@@ -12,6 +12,8 @@ eureka:
 spring:
   application:
     name: pay-service
+  zipkin:
+    base-url: http://123.56.60.46:9411
   datasource:
     #type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver

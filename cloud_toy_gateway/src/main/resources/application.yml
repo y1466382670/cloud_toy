@@ -24,6 +24,8 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: gateway-service
+  zipkin:
+    base-url: http://123.56.60.46:9411
   cloud:
     #################################
     #   gateway相关配置
